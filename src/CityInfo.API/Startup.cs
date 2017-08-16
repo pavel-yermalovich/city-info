@@ -1,7 +1,10 @@
-﻿using CityInfo.API.Services;
+﻿using CityInfo.API.Entities;
+using CityInfo.API.Models;
+using CityInfo.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -44,10 +47,15 @@ namespace CityInfo.API
 #else
             services.AddTransient<IMailService, CloudMailService>();
 #endif
+            var connectionString = @"Server=(localdb)\mssqllocaldb;Database=CityInfoDB;Trusted_Connection=True;";
+            services.AddDbContext<CityInfoContext>(o => o.UseSqlServer(connectionString));
+
+            services.AddScoped<ICityInfoRepository, CityInfoRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+            CityInfoContext cityInfoContext)
         {
             loggerFactory.AddConsole();
 
@@ -65,9 +73,27 @@ namespace CityInfo.API
                 app.UseExceptionHandler();
             }
 
+            cityInfoContext.EnsureSeedDataForContext();
+
             app.UseStatusCodePages();
 
+            ConfigureMappings();
+
             app.UseMvc();
+        }
+
+        private static void ConfigureMappings()
+        {
+            AutoMapper.Mapper.Initialize(cfg =>
+            {
+                cfg.CreateMap<City, CityWithoutPointsOfInterestDto>();
+                cfg.CreateMap<City, CityDto>();
+                cfg.CreateMap<PointOfInterest, PointOfInterestDto>();
+                cfg.CreateMap<PointOfInterestDto, PointOfInterest>();
+                cfg.CreateMap<PointOfInterest, PointOfInterestForUpdateDto>();
+                cfg.CreateMap<PointOfInterestForUpdateDto, PointOfInterest>();
+                cfg.CreateMap<PointOfInterestForCreationDto, PointOfInterest>();
+            });
         }
     }
 }

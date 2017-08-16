@@ -4,3 +4,5 @@
 
 /src/CityInfo.API/bin/Debug/netcoreapp1.0
 /src/CityInfo.API/obj/Debug/netcoreapp1.0
+/.vs/restore.dg
+/src/CityInfo.API/bin/src/CityInfo.API
