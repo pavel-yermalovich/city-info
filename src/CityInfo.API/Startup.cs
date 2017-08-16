@@ -77,15 +77,21 @@ namespace CityInfo.API
 
             app.UseStatusCodePages();
 
+            ConfigureMappings();
+
+            app.UseMvc();
+        }
+
+        private static void ConfigureMappings()
+        {
             AutoMapper.Mapper.Initialize(cfg =>
             {
                 cfg.CreateMap<City, CityWithoutPointsOfInterestDto>();
                 cfg.CreateMap<City, CityDto>();
                 cfg.CreateMap<PointOfInterest, PointOfInterestDto>();
                 cfg.CreateMap<PointOfInterestDto, PointOfInterest>();
+                cfg.CreateMap<PointOfInterest, PointOfInterestForUpdateDto>();
             });
-
-            app.UseMvc();
         }
     }
 }

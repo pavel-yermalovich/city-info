@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CityInfo.API.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -45,6 +44,15 @@ namespace CityInfo.API.Services
             var city = GetCity(cityId, true);
             city.PointsOfInterest.Add(pointOfInterest);
             Save();
+        }
+
+        public void DeletePointOfInterest(PointOfInterest pointOfInterst)
+        {
+            var pointOfInterestToDelete = GetPointOfInterestForCity(pointOfInterst.CityId, pointOfInterst.Id);
+            if (pointOfInterestToDelete != null)
+            {
+                _context.PointOfInterests.Remove(pointOfInterestToDelete);
+            }
         }
 
         public bool Save()

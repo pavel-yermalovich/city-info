@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using CityInfo.API.Entities;
 
 namespace CityInfo.API.Services
@@ -12,6 +11,7 @@ namespace CityInfo.API.Services
         IEnumerable<PointOfInterest> GetPointsOfInterest(int cityId);
         PointOfInterest GetPointOfInterestForCity(int cityId, int id);
         void AddPointOfInterest(int cityId, PointOfInterest pointOfInterest);
+        void DeletePointOfInterest(PointOfInterest pointOfInterst);
         bool Save();
     }
 }

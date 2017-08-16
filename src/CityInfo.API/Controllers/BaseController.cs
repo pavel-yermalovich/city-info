@@ -1,9 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CityInfo.API.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.API.Controllers
 {
     public class BaseController : Controller
     {
-        protected CitiesDataStore CitiesDataStore => CitiesDataStore.Current;
+        public BaseController(ICityInfoRepository repository)
+        {
+            _repository = repository;
+        }
+
+        protected readonly ICityInfoRepository _repository;
     }
 }
